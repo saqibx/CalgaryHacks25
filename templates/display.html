@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lease Analysis</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* ----------------------------
+       BODY & BACKGROUND
+       ---------------------------- */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      background: #6e56c4; /* Fallback color */
+      background: radial-gradient(circle at top left,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(110, 86, 196, 0.8) 50%,
+        #6e56c4 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Decorative shapes in the background */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* One large circle near the top-left */
+    .bg-shape-1 {
+      width: 400px;
+      height: 400px;
+      background: #fff;
+      top: -100px;
+      left: -100px;
+    }
+    /* Another circle near the bottom-right */
+    .bg-shape-2 {
+      width: 300px;
+      height: 300px;
+      background: #fff;
+      bottom: -80px;
+      right: -80px;
+    }
+
+    /* ----------------------------
+       CONTAINER & CONTENT
+       ---------------------------- */
+    .analysis-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 2; /* Above the background shapes */
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+    .header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .analysis-section {
+      margin-bottom: 25px;
+    }
+    .analysis-section h3 {
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+      color: #6e56c4; /* Tie the heading color to your main brand color */
+      font-weight: 600;
+    }
+    .analysis-section p {
+      white-space: pre-wrap; /* Preserve line breaks */
+      font-size: 1.05rem;
+      color: #495057;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Strong text color to tie into the brand color */
+    .analysis-section strong {
+      color: #6e56c4;
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative shapes for a creative background -->
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+
+  <div class="container">
+    <div class="analysis-container">
+      <div class="header">
+        <h1 class="mb-3">Lease Analysis</h1>
+        <hr>
+      </div>
+
+      <!-- Lease Terms -->
+      <div class="analysis-section">
+        <h3>Key Lease Terms and Rental Obligations</h3>
+        {% if analysis.lease_terms is mapping %}
+          {% for key, value in analysis.lease_terms.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.lease_terms }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Potential Issues -->
+      <div class="analysis-section">
+        <h3>Potential Issues</h3>
+        {% if analysis.potential_issues is mapping %}
+          {% for key, value in analysis.potential_issues.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.potential_issues }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Recommendations -->
+      <div class="analysis-section">
+        <h3>Recommendations for Lessee</h3>
+        {% if analysis.recommendations is mapping %}
+          {% for key, value in analysis.recommendations.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.recommendations }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Interaction with Provincial Laws -->
+      <div class="analysis-section">
+        <h3>Interaction with Provincial Laws</h3>
+        {% if analysis.interaction_with_provincial_laws is mapping %}
+          {% for key, value in analysis.interaction_with_provincial_laws.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.interaction_with_provincial_laws }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Remedies/Recourse -->
+      <div class="analysis-section">
+        <h3>Remedies/Recourse</h3>
+        {% if analysis.remedies is mapping %}
+          {% for key, value in analysis.remedies.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.remedies }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Fairness Score -->
+      <div class="analysis-section">
+        <h3>Fairness Score</h3>
+        <p>{{ analysis.fairness_score }}</p>
+      </div>
+
+      <!-- Observations -->
+      <div class="analysis-section">
+        <h3>Observations</h3>
+        {% if analysis.observations is mapping %}
+          {% for key, value in analysis.observations.items() %}
+            <p>
+              <strong>{{ key|replace("_", " ")|capitalize }}:</strong>
+              {{ value }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p>{{ analysis.observations }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies (optional) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
