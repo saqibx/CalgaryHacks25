@@ -30,16 +30,23 @@
             z-index: 1;
         }
 
+        .wrapper {
+            display: flex;
+            gap: 20px;
+            max-width: 1000px;
+            width: 90%;
+            position: relative;
+            z-index: 2;
+        }
+
         .container {
             background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 500px;
-            width: 100%;
-            position: relative;
-            z-index: 2;
+            flex: 1;
+            min-width: 400px;
         }
 
         h2 {
@@ -68,8 +75,6 @@
             font-size: 18px;
             border-radius: 8px;
             transition: background 0.3s, transform 0.2s;
-            position: relative;
-            z-index: 2;
         }
 
         button:hover {
@@ -77,66 +82,68 @@
             transform: scale(1.05);
         }
 
-        .flash-messages {
+        .file-list {
             text-align: left;
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1rem;
+        }
+
+        .file-card {
             background: rgba(255, 255, 255, 0.85);
-            z-index: 2;
-            position: relative;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .file-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Upload Your Rental Agreement</h2>
+    <div class="wrapper">
+        <div class="container">
+            <h2>Upload Your Rental Agreement</h2>
+            <form action="/renters_analysis" method="POST" enctype="multipart/form-data">
+                <label for="province">Select Your Province:</label>
+                <select name="province" id="province" required>
+                    <option value="" disabled selected>Choose a province...</option>
+                    <option value="Alberta">Alberta</option>
+                    <option value="British Columbia">British Columbia</option>
+                    <option value="Manitoba">Manitoba</option>
+                    <option value="New Brunswick">New Brunswick</option>
+                    <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
+                    <option value="Nova Scotia">Nova Scotia</option>
+                    <option value="Ontario">Ontario</option>
+                    <option value="Prince Edward Island">Prince Edward Island</option>
+                    <option value="Quebec">Quebec</option>
+                    <option value="Saskatchewan">Saskatchewan</option>
+                    <option value="Northwest Territories">Northwest Territories</option>
+                    <option value="Nunavut">Nunavut</option>
+                    <option value="Yukon">Yukon</option>
+                </select>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p class="flash-messages {{ category }}">{{ message }}</p>
+                <label for="lease">Upload Your Lease Agreement:</label>
+                <input type="file" name="lease" id="lease" accept=".pdf,.doc,.docx" required>
+
+                <button type="submit">Upload & Analyze</button>
+            </form>
+        </div>
+
+        <div class="container file-list">
+            <h2>Your Uploaded Files</h2>
+            {% if uploaded_files %}
+                {% for file in uploaded_files %}
+                    <div class="file-card">
+                        <a href="/renters_previous/{{ file['file_id'] }}" target="_blank">{{ file['filename'][:30] }}...</a>
+                    </div>
                 {% endfor %}
+            {% else %}
+                <p>No files uploaded yet.</p>
             {% endif %}
-        {% endwith %}
-
-        <form action="/renters_analysis" method="POST" enctype="multipart/form-data">
-            <label for="province">Select Your Province:</label>
-            <select name="province" id="province" required>
-                <option value="" disabled selected>Choose a province...</option>
-                <option value="Alberta">Alberta</option>
-                <option value="British Columbia">British Columbia</option>
-                <option value="Manitoba">Manitoba</option>
-                <option value="New Brunswick">New Brunswick</option>
-                <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
-                <option value="Nova Scotia">Nova Scotia</option>
-                <option value="Ontario">Ontario</option>
-                <option value="Prince Edward Island">Prince Edward Island</option>
-                <option value="Quebec">Quebec</option>
-                <option value="Saskatchewan">Saskatchewan</option>
-                <option value="Northwest Territories">Northwest Territories</option>
-                <option value="Nunavut">Nunavut</option>
-                <option value="Yukon">Yukon</option>
-            </select>
-
-            <label for="lease">Upload Your Lease Agreement:</label>
-            <input type="file" name="lease" id="lease" accept=".pdf,.doc,.docx" required>
-
-            <button type="submit">Upload & Analyze</button>
-        </form>
+        </div>
     </div>
 </body>
 </html>
+

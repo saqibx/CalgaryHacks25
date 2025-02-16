@@ -20,28 +20,28 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 def pdf_to_text(file_id):
 
-    # Convert file_id to ObjectId if necessary
+
     if isinstance(file_id, str):
         file_id = ObjectId(file_id)
 
-    # Retrieve the file from GridFS using the existing GridFS instance 'fs'
+
     grid_out = fs.get(file_id)
 
-    # Read PDF data into an in-memory bytes stream
+
     pdf_data = grid_out.read()
     pdf_stream = io.BytesIO(pdf_data)
 
-    # Parse the PDF using PyPDF2
+
     reader = PyPDF2.PdfReader(pdf_stream)
 
-    # Extract text from each page of the PDF
+
     text = ""
     for page in reader.pages:
         page_text = page.extract_text()
         if page_text:
-            text += page_text + " "  # Add a space between pages
+            text += page_text + " "
 
-    # Post-process: collapse all whitespace (newlines, extra spaces) into single spaces.
+
     compact_text = ' '.join(text.split())
 
     instructions = RentersMethods.Instructions.instructions + " DO NOT INCLUDE THINGS LIKE Okay, here's the expert analysis of the provided rental agreement, adhering to the constraints specified:"

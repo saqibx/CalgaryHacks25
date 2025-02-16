@@ -5,7 +5,7 @@ instructions = "Analyze the provided lease or rental contract thoroughly and gen
                " on what actions the lessee should or should not take based solely " \
                "on the clauses, evaluate how these terms interact with applicable provincial laws," \
                " and offer guidance on available remedies or recourse if issues arise." \
-               " Conclude with a fairness score on a scale from 1 to 10," \
+               " Conclude with a fairness score on a scale from 1 to 10 and give justification," \
                " and include any other relevant observations—all without any disclaimers, " \
                "introductory statements, or extraneous commentary. Please analyze the provided " \
                "rental agreement and return the output as a JSON object with the following keys: " \

@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, Response
 import gridfs
 from bson.objectid import ObjectId
+from flask_wtf import file
 
 import RentersMethods.deepseek_analysis
 from extensions import fs, db
@@ -16,8 +17,9 @@ def renters():
         flash("You must be logged in to upload files!", "danger")
         return redirect(url_for("login.login"))
 
-    username = session["username"]
+    username = session["user"]
     uploaded_files = list(db.uploads.find({"username": username}))
+    print(uploaded_files)
 
     return render_template("renters.html", uploaded_files=uploaded_files)
 
@@ -27,13 +29,13 @@ def renters_analysis():
         flash("No file uploaded. Please upload again.", "danger")
         return redirect(url_for("renters.renters"))
 
-    file = request.files["lease"]  # ✅ Match the form name="lease"
+    file = request.files["lease"]
     flash(file.filename)
     if file.filename == "":
         flash("No selected file", "danger")
         return redirect(url_for("renters.renters"))
 
-    username = session["username"]
+    username = session["user"]
 
     province = request.form.get('province')
     if province:
@@ -52,6 +54,13 @@ def renters_analysis():
     flash("Successfully uploaded!", "success")
     return redirect(url_for("renters.display_analysis"))
 
+@renters_bp.route("/renters_previous/<file_id>", methods=["GET"])
+def renters_previous(file_id):
+    username = session.get("username")
+    session['file_id'] = str(file_id)
+
+    return redirect(url_for("renters.display_analysis"))
+
 @renters_bp.route("/download_files", methods=["GET", "POST"])
 def download_files():
     return "under const"
@@ -63,8 +72,8 @@ def download_files():
 
 def get_file_content(file_id):
     try:
-        file = fs.get(ObjectId(file_id))  # Retrieve file from GridFS
-        content = file.read()  # Read file contents
+        file = fs.get(ObjectId(file_id))
+        content = file.read()
         return content
     except Exception as e:
         print(f"Error retrieving file: {e}")
@@ -76,7 +85,7 @@ def display_analysis():
     data = RentersMethods.deepseek_analysis.finalized_analysis()
     print("Gemini output:", data)  # Debug print
 
-    # Remove markdown code fences if present
+
     if data.startswith("```json"):
         data = data.split("```json", 1)[1]
         if "```" in data:
