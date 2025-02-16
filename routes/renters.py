@@ -16,7 +16,7 @@ def renters():
         flash("You must be logged in to upload files!", "danger")
         return redirect(url_for("login.login"))
 
-    username = session["user"]
+    username = session["username"]
     uploaded_files = list(db.uploads.find({"username": username}))
 
     return render_template("renters.html", uploaded_files=uploaded_files)
@@ -33,7 +33,13 @@ def renters_analysis():
         flash("No selected file", "danger")
         return redirect(url_for("renters.renters"))
 
-    username = session["user"]
+    username = session["username"]
+
+    province = request.form.get('province')
+    if province:
+        session['location'] = province
+    else:
+        session['location'] = "Canada"
 
     file_id = fs.put(file, filename=file.filename, username=username)
     session['file_id'] = str(file_id)

@@ -45,7 +45,8 @@ def pdf_to_text(file_id):
     compact_text = ' '.join(text.split())
 
     instructions = RentersMethods.Instructions.instructions + " DO NOT INCLUDE THINGS LIKE Okay, here's the expert analysis of the provided rental agreement, adhering to the constraints specified:"
-    compact_text = f'{instructions} \n{compact_text}'
+    location_details = f"This person is from {session.get('location')}, so make the provincial laws specific to this location"
+    compact_text = f'{instructions} \n{compact_text} {location_details}'
     return compact_text
 
 def feed(content):
