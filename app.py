@@ -17,4 +17,4 @@ app.register_blueprint(home_bp)
 app.register_blueprint(renters_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True)
